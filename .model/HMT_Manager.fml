@@ -1,0 +1,542 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <entity name="MixGenreQuery">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">MixGenreQuery</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getMixGenres">
+      <item name="propertySpecifier">id,mixGenre,creatorID</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer" required="true"/>
+    <property name="mixGenre" type="string" required="true"/>
+    <property name="creatorID" type="integer" required="true"/>
+  </entity>
+  <entity name="SaveDJReturnStruct">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">SaveDJReturnStruct</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DJs</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="saveDJ">
+      <item name="propertySpecifier">MESSAGE</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="MESSAGE" type="string" required="true"/>
+  </entity>
+  <entity name="DeleteMixReturnStruct">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">DeleteMixReturnStruct</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="deleteMix">
+      <item name="propertySpecifier">MESSAGE</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="MESSAGE" type="string" required="true"/>
+  </entity>
+  <entity name="MixQuery">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">MixQuery</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getMixes">
+      <item name="propertySpecifier">mixArtist,mixImageBig,mixFile,mixDesc,mixImageSmall,mixFileUser,mixYear,id,mixName,mixGenre,complete,user_id,createDate</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="mixArtist" type="string" required="true"/>
+    <property name="mixImageBig" type="string" required="true"/>
+    <property name="mixFile" type="string" required="true"/>
+    <property name="mixDesc" type="opaque" required="true"/>
+    <property name="mixImageSmall" type="string" required="true"/>
+    <property name="mixFileUser" type="opaque" required="true"/>
+    <property name="mixYear" type="integer" required="true"/>
+    <property name="id" type="integer" required="true"/>
+    <property name="mixName" type="string" required="true"/>
+    <property name="mixGenre" type="string" required="true"/>
+    <property name="complete" type="integer" required="true"/>
+    <property name="user_id" type="integer" required="true"/>
+    <property name="createDate" type="opaque" required="true"/>
+  </entity>
+  <entity name="MixGenreString">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">MixGenreString</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getMixGenres">
+      <item name="propertySpecifier">mixGenre</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="mixGenre" type="string" required="true"/>
+  </entity>
+  <entity name="NewMixArray">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">NewMixArray</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="createMix">
+      <item name="propertySpecifier">id,mixArtist,mixImageBig,mixName,mixGenre,mixFile,complete,mixImageSmall,user_id,mixFileUser,mixYear,createDate</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer" required="true"/>
+    <property name="mixArtist" type="opaque" required="true"/>
+    <property name="mixImageBig" type="opaque" required="true"/>
+    <property name="mixName" type="opaque" required="true"/>
+    <property name="mixGenre" type="opaque" required="true"/>
+    <property name="mixFile" type="opaque" required="true"/>
+    <property name="complete" type="integer" required="true"/>
+    <property name="mixImageSmall" type="opaque" required="true"/>
+    <property name="user_id" type="integer" required="true"/>
+    <property name="mixFileUser" type="opaque" required="true"/>
+    <property name="mixYear" type="opaque" required="true"/>
+    <property name="createDate" type="date" required="true"/>
+  </entity>
+  <entity name="LoginStruct">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">LoginStruct</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DJs</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="Login">
+      <item name="propertySpecifier">SUCCESS,MESSAGE,ID</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="QUERY" type="opaque[]" required="true"/>
+    <property name="SUCCESS" type="string" required="true"/>
+    <property name="MESSAGE" type="string" required="true"/>
+    <property name="ID" type="integer" required="true"/>
+  </entity>
+  <entity name="DJStruct">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">DJStruct</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DJs</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getDJ">
+      <item name="propertySpecifier">id,lastName,username,facebookLink,bio,djName,email,twitterLink,firstName,imageSmall,password,imageBig</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer" required="true"/>
+    <property name="lastName" type="string" required="true"/>
+    <property name="username" type="string" required="true"/>
+    <property name="facebookLink" type="opaque" required="true"/>
+    <property name="bio" type="string" required="true"/>
+    <property name="djName" type="string" required="true"/>
+    <property name="email" type="opaque" required="true"/>
+    <property name="twitterLink" type="opaque" required="true"/>
+    <property name="firstName" type="string" required="true"/>
+    <property name="imageSmall" type="string" required="true"/>
+    <property name="password" type="string" required="true"/>
+    <property name="imageBig" type="string" required="true"/>
+  </entity>
+  <entity name="AllDJ">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">AllDJ</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DJs</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getAllDJ">
+      <item name="propertySpecifier">lastName,imageSmall,password,id,username,facebookLink,mixcount,bio,djName,email,twitterLink,firstName,imageBig</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="lastName" type="opaque" required="true"/>
+    <property name="imageSmall" type="opaque" required="true"/>
+    <property name="password" type="string" required="true"/>
+    <property name="id" type="integer" required="true"/>
+    <property name="username" type="string" required="true"/>
+    <property name="facebookLink" type="opaque" required="true"/>
+    <property name="mixcount" type="double" required="true" default="0"/>
+    <property name="bio" type="opaque" required="true"/>
+    <property name="djName" type="string" required="true"/>
+    <property name="email" type="opaque" required="true"/>
+    <property name="twitterLink" type="opaque" required="true"/>
+    <property name="firstName" type="opaque" required="true"/>
+    <property name="imageBig" type="opaque" required="true"/>
+  </entity>
+  <entity name="OneDJ">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">OneDJ</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DJs</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getDJ">
+      <item name="propertySpecifier">id,lastName,username,facebookLink,bio,djName,email,twitterLink,firstName,imageSmall,password,imageBig</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="id" type="integer" required="true"/>
+    <property name="lastName" type="string" required="true"/>
+    <property name="username" type="string" required="true"/>
+    <property name="facebookLink" type="opaque" required="true"/>
+    <property name="bio" type="string" required="true"/>
+    <property name="djName" type="string" required="true"/>
+    <property name="email" type="string" required="true"/>
+    <property name="twitterLink" type="opaque" required="true"/>
+    <property name="firstName" type="string" required="true"/>
+    <property name="imageSmall" type="string" required="true"/>
+    <property name="password" type="string" required="true"/>
+    <property name="imageBig" type="string" required="true"/>
+  </entity>
+  <service name="DJs">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">DJs</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.djs</item>
+      <item name="Endpoint">http://localhost:8500/flex2gateway/</item>
+      <item name="Destination">ColdFusion</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">ColdFusion</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="COLDFUSION_SERVER_ROOT_URL">http://localhost:8500/</item>
+      <item name="LINKED_FILE">DJs.cfc</item>
+      <item name="COLDFUSION_SERVER_CONTEXT_ROOT"></item>
+      <item name="CFC_CLASS_NAME">DJs</item>
+      <item name="CFC_RELATIVE_LOCATION">DJs.cfc</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost:8500/flex2gateway/</item>
+      <item name="CFC_LOCATION">C:/ColdFusion9/wwwroot/DJs.cfc</item>
+    </annotation>
+    <function name="saveDJ" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque,opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+      <parameter name="djName" type="opaque"/>
+      <parameter name="firstName" type="opaque"/>
+      <parameter name="lastName" type="opaque"/>
+      <parameter name="bio" type="opaque"/>
+      <parameter name="email" type="opaque"/>
+    </function>
+    <function name="Login" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string,string</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="username" type="string"/>
+      <parameter name="password" type="string"/>
+    </function>
+    <function name="saveDJphoto" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+      <parameter name="fileNameBig" type="opaque"/>
+      <parameter name="fileNameSmall" type="opaque"/>
+    </function>
+    <function name="getAllDJ" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="saveDJPassword" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+      <parameter name="password" type="opaque"/>
+    </function>
+    <function name="getDJ" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">float</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="float"/>
+    </function>
+  </service>
+  <service name="Mixes">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">mixes</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.mixes</item>
+      <item name="Endpoint">http://localhost:8500/flex2gateway/</item>
+      <item name="Destination">ColdFusion</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">ColdFusion</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="COLDFUSION_SERVER_ROOT_URL">http://localhost:8500/</item>
+      <item name="LINKED_FILE">mixes.cfc</item>
+      <item name="COLDFUSION_SERVER_CONTEXT_ROOT"></item>
+      <item name="CFC_CLASS_NAME">mixes</item>
+      <item name="CFC_RELATIVE_LOCATION">mixes.cfc</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost:8500/flex2gateway/</item>
+      <item name="CFC_LOCATION">C:/ColdFusion9/wwwroot/mixes.cfc</item>
+    </annotation>
+    <function name="getMixYears" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="deleteMix" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+    </function>
+    <function name="createMix" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="djId" type="opaque"/>
+    </function>
+    <function name="getMixGenres" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="saveDJMixFile" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="djId" type="opaque"/>
+      <parameter name="mixId" type="opaque"/>
+      <parameter name="mixFileUser" type="opaque"/>
+    </function>
+    <function name="saveDJmixImage" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="djId" type="opaque"/>
+      <parameter name="mixId" type="opaque"/>
+      <parameter name="mixImageUserBig" type="opaque"/>
+      <parameter name="mixImageUserSmall" type="opaque"/>
+    </function>
+    <function name="saveMix" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque,opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="id" type="opaque"/>
+      <parameter name="mixName" type="opaque"/>
+      <parameter name="mixYear" type="opaque"/>
+      <parameter name="mixGenre" type="opaque"/>
+      <parameter name="mixDesc" type="opaque"/>
+      <parameter name="readyToBeEncoded" type="opaque"/>
+    </function>
+    <function name="getMixes" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">float</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="user_id" type="float"/>
+    </function>
+    <function name="getMixesPage" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="user_id" type="opaque"/>
+      <parameter name="sort" type="opaque"/>
+      <parameter name="filter" type="opaque"/>
+    </function>
+    <function name="getPromos" return-type="CustomDatatype[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">mixImageBig,djID,mixFile,mixDesc,mixID,mixYear,mixcount,mixName,mixGenre,bio,djName,promoImage,mixLen,promoSectionName,imageBig</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getFavesPage" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="mixIdList" type="opaque"/>
+      <parameter name="sort" type="opaque"/>
+    </function>
+  </service>
+  <entity name="CustomDatatype">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">CustomDatatype</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getPromos">
+      <item name="propertySpecifier">mixImageBig,djID,mixFile,mixDesc,mixID,mixYear,mixcount,mixName,mixGenre,bio,djName,promoImage,mixLen,promoSectionName,imageBig</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="mixImageBig" type="string" required="true"/>
+    <property name="djID" type="integer" required="true"/>
+    <property name="mixFile" type="string" required="true"/>
+    <property name="mixDesc" type="string" required="true"/>
+    <property name="mixID" type="integer" required="true"/>
+    <property name="mixYear" type="integer" required="true"/>
+    <property name="mixcount" type="double" required="true" default="0"/>
+    <property name="mixName" type="string" required="true"/>
+    <property name="mixGenre" type="string" required="true"/>
+    <property name="bio" type="string" required="true"/>
+    <property name="djName" type="string" required="true"/>
+    <property name="promoImage" type="string" required="true"/>
+    <property name="mixLen" type="double" required="true" default="0"/>
+    <property name="promoSectionName" type="string" required="true"/>
+    <property name="imageBig" type="string" required="true"/>
+  </entity>
+  <entity name="PromoData">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">PromoData</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">Mixes</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="getPromos">
+      <item name="propertySpecifier">mixImageBig,djID,mixFile,mixDesc,mixID,mixYear,mixName,mixGenre,bio,djName,promoImage,mixLen,promoSectionName,imageBig</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="mixImageBig" type="string" required="true"/>
+    <property name="djID" type="integer" required="true"/>
+    <property name="mixFile" type="string" required="true"/>
+    <property name="mixDesc" type="string" required="true"/>
+    <property name="mixID" type="integer" required="true"/>
+    <property name="mixYear" type="integer" required="true"/>
+    <property name="mixName" type="string" required="true"/>
+    <property name="mixGenre" type="string" required="true"/>
+    <property name="bio" type="string" required="true"/>
+    <property name="djName" type="string" required="true"/>
+    <property name="promoImage" type="string" required="true"/>
+    <property name="mixLen" type="double" required="true" default="0"/>
+    <property name="promoSectionName" type="string" required="true"/>
+    <property name="imageBig" type="string" required="true"/>
+  </entity>
+</model>

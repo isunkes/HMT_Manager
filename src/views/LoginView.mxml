@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:assets="assets.*"
+					xmlns:djs="services.djs.*"
+					xmlns:valueObjects="valueObjects.*"
+					width="700" height="527">
+	
+	<fx:Metadata>
+		[Event(name="login2", type="events.LoginEvent")]
+	</fx:Metadata>
+	<fx:Style>
+		
+		/* StyleableTextField, regular */
+		@font-face {
+			src: url("assets/BebasNeue.otf");
+			fontFamily: "BebasNeue";
+			embedAsCFF: false;
+		}
+		
+		
+		
+		/* Label, regular */
+		@font-face {
+			src: url("assets/BebasNeue.otf");
+			fontFamily: "BebasNeueCFF";
+			embedAsCFF: true;
+		}
+		
+		/* Label, bold */
+		@font-face {
+			src: url("assets/BebasNeue.otf");
+			fontFamily: "BebasNeueCFF";
+			fontWeight: bold;
+			embedAsCFF: true;
+		}
+		
+		
+		
+		
+		
+		
+	</fx:Style>
+	<fx:Script>
+		<![CDATA[
+			import events.LoginEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.containers.ViewStack;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var MessageText:String = '';
+			[Bindable]
+			public var passwordText:String = "";
+			[Bindable]
+			public var usernameText:String = "";
+			protected function login_clickHandler(event:MouseEvent):void
+			{
+				var eventObj:LoginEvent = new LoginEvent("login2");
+				eventObj.username = username.text;
+				eventObj.password = password.text;
+				dispatchEvent(eventObj);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Form x="69" y="211" width="391" height="190">
+		<s:FormItem width="369" label="Username" fontSize="21">
+			<s:TextInput id="username" width="239" height="32" text="{usernameText}"/>
+		</s:FormItem>
+		<s:FormItem width="370" label="Password" fontSize="21">
+			<s:TextInput id="password" width="240" displayAsPassword="true" text="{passwordText}"/>
+		</s:FormItem>
+		<s:FormItem width="369">
+			<s:Button id="login" 
+					  width="142" height="39" label="Login" fontFamily="Arial"
+					  fontSize="21" click="login_clickHandler(event)"/>
+		</s:FormItem>
+	</s:Form>
+	<s:Image x="452" y="222" source="assets/turntable.png"/>
+	<s:Label id="message" x="201" y="409" width="458" height="79" color="#FF0000"
+			 fontSize="19" text="{MessageText}"/>
+	<s:Label x="516" y="365" fontSize="16" text="v1.0.1"/>
+	<s:Image x="74" y="60" source="assets/LoginTitle.png"/>
+	
+	
+</s:NavigatorContent>

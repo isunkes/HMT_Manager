@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:djs="services.djs.*"
+					xmlns:valueObjects="valueObjects.*"
+					width="696" height="540"
+					creationComplete="init()">
+	
+	<s:states>
+		<s:State name="main" />
+		<s:State name="uploadingPhoto" />
+	</s:states>
+	
+	<fx:Metadata>
+		[Event(name="saveDjForm", type="events.SaveDJEvent")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import flash.net.FileFilter;
+			import events.SaveDJEvent;
+			
+			[Bindable]
+			public var djId:Number;
+			[Bindable]
+			public var djNameText:String;
+			[Bindable]
+			public var firstNameText:String;
+			[Bindable]
+			public var lastNameText:String;
+			[Bindable]
+			public var bioText:String;
+			[Bindable]
+			public var emailText:String;
+			[Bindable]
+			public var djImage:String = 'assets/placeHolderDJBig.png';
+			
+			private var FILE_UPLOAD_URL:String;
+			private var fileRef:File;
+			
+			private function init():void {
+				fileRef = new File();
+				fileRef.addEventListener(Event.SELECT, fileRef_select);
+				fileRef.addEventListener(ProgressEvent.PROGRESS, fileRef_progress);
+				fileRef.addEventListener(Event.COMPLETE, fileRef_complete);
+				fileRef.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				currentState = 'main';
+			}
+			
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				trace("ioErrorHandler: " + event);
+			}
+			
+			private function browseAndUpload():void {
+				fileRef.browse(getTypes());
+			}
+			private function getTypes():Array {
+				var allTypes:Array = new Array(getImageTypeFilter());
+				return allTypes;
+			}
+			private function getImageTypeFilter():FileFilter {
+				return new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png");
+			}
+			
+			private function fileRef_select(evt:Event):void {
+				try {
+					FILE_UPLOAD_URL = "http://www.indiedj.fm/uploadProfilePhoto.cfm?djid=" + djId;
+					
+					fileRef.upload(new URLRequest(FILE_UPLOAD_URL));
+				} catch (err:Error) {
+				
+				}
+			}
+			
+			private function fileRef_progress(evt:ProgressEvent):void {
+				currentState = 'uploadingPhoto';
+			}
+			
+			private function fileRef_complete(evt:Event):void {
+				currentState = 'main';
+				djImage="http://www.indiedj.fm/djProfile/user" + djId + "/profileimages/"+ fileRef.name;
+			}
+			
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var eventObj:SaveDJEvent = new SaveDJEvent("saveDjForm");
+				eventObj.djName = djname.text;
+				eventObj.firstName = firstname.text;
+				eventObj.lastName = lastname.text;
+				eventObj.bioText = bio.text;
+				eventObj.emailText = email.text;
+				dispatchEvent(eventObj);
+				
+			}
+			
+			protected function changePasswordButton_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("http://www.indiedj.fm/index.cfm/main/resetPasswordLogin"));
+			}
+			
+		]]>
+	</fx:Script>		
+	
+	<fx:Declarations>
+		<s:NumberFormatter id="numberFormatter">
+			
+		</s:NumberFormatter>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:HGroup x="10" y="10" width="680" height="409">
+		<s:Form width="363" height="479">
+			<s:FormHeading label="Edit DJ Profile" fontSize="20"/>
+			<s:FormItem width="345" label="Dj Name" fontSize="16">
+				<s:TextInput id="djname" width="250" fontSize="16"
+							 text="{djNameText}"/>
+			</s:FormItem>
+			<s:FormItem width="345" label="First name" fontSize="16">
+				<s:TextInput id="firstname" width="250" fontSize="16" text="{firstNameText}"/>
+			</s:FormItem>
+			<s:FormItem width="346" label="Last Name" fontSize="16">
+				<s:TextInput id="lastname" width="250" fontSize="16"
+							 text="{lastNameText}"/>
+			</s:FormItem>
+			<s:FormItem width="345" label="Email" fontSize="16">
+				<s:TextInput id="email" width="250" text="{emailText}"/>
+			</s:FormItem>
+			<s:FormItem width="339" height="131" label="DJ Bio" fontSize="16">
+				<s:TextArea id="bio" width="250" height="109" fontSize="16" text="{bioText}"/>
+			</s:FormItem>
+		</s:Form>
+		<s:VGroup width="312" height="404" paddingLeft="10">
+			<s:Spacer width="61" height="26"/>
+			<s:Panel width="275" height="358" fontSize="18" title="Profile Image">
+				<s:Image id="djimagepic" x="12" y="12" width="250" height="250" source="{djImage}"/>
+				<s:Button x="64" y="270" width="146" height="28" label="Upload Image"
+						  click="browseAndUpload();" fontSize="16" fontWeight="bold" includeIn="main"/>
+				<mx:ProgressBar id="progressBar" includeIn="uploadingPhoto" x="37" y="272"
+								fontSize="15" indeterminate="true"/>
+				<s:Label x="128" y="-19" fontSize="12" text="(square image prefered)"/>
+			</s:Panel>
+		</s:VGroup>
+	</s:HGroup>
+	<s:BorderContainer x="32" y="438" width="632" height="66" backgroundColor="#666666"
+					   borderColor="#A4A4A4" borderWeight="4" dropShadowVisible="false">
+		<s:Button x="448" y="10" width="166" height="37" label="Save DJ Profile"
+				  click="button1_clickHandler(event)" fontSize="16" fontWeight="bold"/>
+		<s:Label x="10" y="23" fontSize="16" fontWeight="bold"
+				 text="To update your INDIEDJ.FM password"/>
+		<s:Button id="changePasswordButton"  x="318" y="14" height="29" label="Click Here" fontSize="16"
+				  fontWeight="bold" click="changePasswordButton_clickHandler(event)"/>
+	</s:BorderContainer>
+	
+	
+	
+	
+</s:NavigatorContent>

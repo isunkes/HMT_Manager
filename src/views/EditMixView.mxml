@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:mixes="services.mixes.*"
+					xmlns:skins="skins.*"
+					width="719" height="554" creationComplete="init()">
+	
+	<fx:Metadata>
+		[Event(name="SaveMix", type="events.SaveDJMixEvent")]
+	</fx:Metadata>
+	
+	<s:states>
+		
+		<s:State name="showreadybox" />
+		<s:State name="awaiting" />
+		<s:State name="encoded" />
+		<s:State name="uploadingmix" />
+		<s:State name="uploadingmixphoto" />
+		<s:State name="main" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import events.SaveDJMixEvent;
+			
+			import flash.net.FileFilter;
+			
+			import mx.controls.Alert;
+			import mx.controls.ProgressBarMode;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var djId:Number;
+			[Bindable]
+			public var mixComplete:Number = 4;
+			[Bindable]
+			public var mixObject:Object;
+			[Bindable]
+			public var mixFile:String = 'Not Uploaded Yet';
+			[Bindable]
+			public var mixImage:String = 'assets/placeHolderMix.png';
+			
+			private var readyTobeEncoded:Number = 0;
+			
+			private var FILE_UPLOAD_URL:String;
+			private var fileRefMix:File;
+			private var FILE_UPLOAD_IMAGE_URL:String;
+			private var fileRefImage:File;
+			
+			// INIT FUNCTION
+			private function init():void {
+				fileRefMix = new File();
+				fileRefMix.addEventListener(Event.SELECT, fileRefMix_select);
+				fileRefMix.addEventListener(ProgressEvent.PROGRESS, fileRefMix_progress);
+				fileRefMix.addEventListener(Event.COMPLETE, fileRefMix_complete);
+				fileRefMix.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				
+				fileRefImage = new File();
+				fileRefImage.addEventListener(Event.SELECT, fileRefImage_select);
+				fileRefImage.addEventListener(Event.COMPLETE, fileRefImage_complete);
+				fileRefImage.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				
+				
+			}
+			
+			//IO ERROR
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				trace("ioErrorHandler: " + event);
+			}
+			
+			// MIX UPLOAD FUNCTIONS
+			private function browseAndUploadMix():void {
+				fileRefMix.browse(getTypesMix());
+			}
+			private function getTypesMix():Array {
+				var allTypes:Array = new Array(getAudioTypeFilter());
+				return allTypes;
+			}
+			private function getAudioTypeFilter():FileFilter {
+				return new FileFilter("MP3 or FLV", "*.mp3;*.flv");
+			}
+			
+			private function fileRefMix_select(evt:Event):void {
+				try {
+					FILE_UPLOAD_URL = "http://www.indiedj.fm/uploadProfileMix.cfm?type=mix&djid=" + djId + '&mixid=' + mixObject.id;
+					
+					fileRefMix.upload(new URLRequest(FILE_UPLOAD_URL));
+					// Show progress bar
+					progressBarMix.visible=true;
+					progressBarMix.mode=ProgressBarMode.MANUAL;
+					progressBarMix.minimum=0;
+					progressBarMix.maximum=100;            
+					
+					browseMix.visible=false;
+					saveMixButton.enabled=false;
+					saveMixButton.label="Mix Uploading...";
+				} catch (err:Error) {
+					
+				}
+			}
+			
+			private function fileRefMix_progress(event:ProgressEvent):void {
+				
+				var percentLoaded:Number=event.bytesLoaded/event.bytesTotal*100;
+				
+				progressBarMix.setProgress(percentLoaded, 100);
+			}
+			
+			private function fileRefMix_complete(evt:Event):void {
+				browseMix.visible=true;
+				progressBarMix.visible = false;
+				saveMixButton.enabled=true;
+				saveMixButton.label="Save DJ Mix";
+				mixFile= fileRefMix.name;
+			}
+			
+			//COVER IMAGE UPLOAD FUNCTIONS
+			private function browseAndUploadImage():void {
+				fileRefImage.browse(getTypesImage());
+			}
+			private function getTypesImage():Array {
+				var allTypes:Array = new Array(getImageTypeFilter());
+				return allTypes;
+			}
+			private function getImageTypeFilter():FileFilter {
+				return new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png");
+			}
+			
+			private function fileRefImage_select(evt:Event):void {
+				try {
+					FILE_UPLOAD_IMAGE_URL = "http://www.indiedj.fm/uploadProfileMix.cfm?type=image&djid=" + djId + '&mixid=' + mixObject.id;
+					
+					fileRefImage.upload(new URLRequest(FILE_UPLOAD_IMAGE_URL));
+					// Show progress bar
+					progressBarImage.visible=true;
+					browseImage.visible=false;
+				} catch (err:Error) {
+					
+				}
+			}
+			
+			private function fileRefImage_complete(evt:Event):void {
+				browseImage.visible=true;
+				progressBarImage.visible = false;
+				mixImage="http://www.indiedj.fm/djProfile/user" + djId + "/mixes/images/Big"+ fileRefImage.name;
+			}
+			
+			
+			
+			// SELECT INPUT FUNCTIONS
+			protected function mixYearSelect_creationCompleteHandler(event:FlexEvent):void
+			{
+				getMixYearsResult.addEventListener(ResultEvent.RESULT,onGetMixYearsResult);
+				getMixYearsResult.token = mixes.getMixYears();
+			}
+			
+			protected function onGetMixYearsResult(event:ResultEvent):void
+			{
+				
+				for(var i:uint=0;i<event.result.length;i++)
+				{
+					if(event.result[i]==mixObject.mixYear)
+					{
+						mixYearSelect.selectedItem=event.result[i];
+						break;
+					}
+				}
+				
+			}
+			
+			/*protected function mixGenreSelect_creationCompleteHandler(event:FlexEvent):void
+			{
+				getMixGenresResult.addEventListener(ResultEvent.RESULT,onGetMixGenreResult);
+				getMixGenresResult.token = mixes.getMixGenres();
+			}
+			
+			protected function onGetMixGenreResult(event:ResultEvent):void
+			{
+				for(var i:uint=0;i<event.result.length;i++)
+				{
+					if(event.result[i].mixGenre==mixObject.mixGenre)
+					{
+						mixGenreSelect.selectedItem=event.result[i];
+						break;
+					}
+				}
+			}*/
+			
+			
+			protected function mixFileText_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (mixFile == null)
+				{
+					mixFileText.text = 'Not Uploaded Yet';
+				}
+			}
+			
+			protected function miximagepic_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				if (mixImage == null)
+				{
+					miximagepic.source = 'assets/placeHolderMix.png';
+				}
+			}
+			
+			protected function SaveDJMix_clickHandler(event:MouseEvent):void
+			{
+				var eventObj:SaveDJMixEvent = new SaveDJMixEvent("SaveMix");
+				eventObj.mixID = mixObject.id;
+				eventObj.mixName = mixNameText.text;
+				eventObj.mixYear = mixYearSelect.selectedItem;
+				eventObj.mixGenre = mixGenreText.text;
+				eventObj.mixDesc = mixDescText.text;
+				eventObj.readyTobeEncoded = readyTobeEncoded;
+				dispatchEvent(eventObj);
+				
+			}
+			
+			
+			
+			
+			protected function complete_clickHandler(event:MouseEvent):void
+			{
+				if (complete.selected == true)
+				{
+					readyTobeEncoded = 1;
+				}
+				else
+				{
+					readyTobeEncoded = 0;	
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getMixYearsResult"/>
+		<mixes:Mixes id="mixes"
+					 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+					 showBusyCursor="true"/>
+		<s:CallResponder id="getMixGenresResult"/>
+		
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:HGroup x="10" y="10" width="667" height="446" verticalAlign="top">
+		<s:VGroup width="344" height="406">
+			<s:Form width="346" height="288">
+				<s:FormHeading label="Edit DJ Mix" fontSize="20"
+							   height="37"/>
+				<s:FormItem width="326" label="Mix Name" fontSize="16">
+					<s:TextInput id="mixNameText" width="225" text="{mixObject.mixName}"/>
+				</s:FormItem>
+				<s:FormItem width="324" label="Mix Year" fontSize="16">
+					<s:DropDownList id="mixYearSelect" width="181" height="25"
+									creationComplete="mixYearSelect_creationCompleteHandler(event)"
+									prompt="Select Year"
+									selectedItem="{mixObject.mixYear}">
+						<s:AsyncListView list="{getMixYearsResult.lastResult}"/>
+					</s:DropDownList>
+				</s:FormItem>
+				<s:FormItem label="Mix Genre" fontSize="16">
+					<s:TextInput id="mixGenreText" width="225" fontSize="16"
+								 text="{mixObject.mixGenre}"/>
+				</s:FormItem>
+				<s:FormItem width="333" height="76" label="Mix Desc." fontSize="16">
+					<s:TextArea id="mixDescText" width="225" height="66" text="{mixObject.mixDesc}" maxChars="200"/>
+				</s:FormItem>
+			</s:Form>
+			<s:HGroup width="337" height="17">
+				<s:Spacer width="218" height="12" />
+				<s:Label text="(200 character limit)"/>
+			</s:HGroup>
+			<s:HGroup width="332" height="127">
+				<s:Spacer width="17" height="164"/>
+				<s:Panel width="312" height="121" borderColor="#A4A4A4" fontSize="16"
+						 title="Mix File">
+					<s:FormItem x="0" y="0" width="300" label="Current File:" fontSize="14">
+						<s:Label id="mixFileText" width="190"
+								 creationComplete="mixFileText_creationCompleteHandler(event)"
+								 text="{mixFile}"
+								 height="40"/>
+					</s:FormItem>
+					
+						<s:Spacer y="6" width="7" height="20"/>
+						<s:Button id="browseMix" x="70" y="56" width="146" height="28"
+								  label="Upload Mix" click="browseAndUploadMix();" fontSize="16"
+								  fontWeight="bold"/>
+					<s:Spacer  x="5" y="105" width="9" height="32"/>
+					<mx:ProgressBar id="progressBarMix" width="272" height="39"
+									fontSize="14"
+									x="22" y="56"
+									visible="false"/>
+					<s:Label x="249" y="-21" fontSize="12" text="(mp3, flv)"/>
+				</s:Panel>
+			</s:HGroup>
+		</s:VGroup>
+		
+		<s:VGroup width="314" height="433" >
+			<s:Spacer width="26" height="51"/>
+			<s:Panel width="308" height="382" borderColor="#A4A4A4" fontSize="16"
+					 title="Mix Cover Image">
+				<s:Image id="miximagepic" x="28" y="46" width="250" height="250"
+						 creationComplete="miximagepic_creationCompleteHandler(event)"
+						 source="{mixImage}"/>
+				<s:Button id="browseImage" x="65" y="304" width="177" height="28"
+						  label="Upload Cover Image" click="browseAndUploadImage();" fontSize="16"
+						  fontWeight="bold"/>
+				<mx:ProgressBar id="progressBarImage" width="250" height="20"
+								fontSize="14" indeterminate="true"
+								x="24" y="304"
+								visible="false"/>
+				<s:Label x="161" y="-21" fontSize="12" text="(square image prefered)"/>
+				<s:Label x="28" y="10" width="214" fontSize="12" height="28" text="Uploaded image will be resized to (500 x 500) &amp; (150 x 150) px"/>
+			</s:Panel>
+		</s:VGroup>
+	</s:HGroup>
+	<s:BorderContainer x="30" y="464" width="637" height="66" backgroundColor="#666666"
+					   borderColor="#A4A4A4" borderWeight="4" dropShadowVisible="false">
+		<s:Button id="saveMixButton" x="460" y="10" width="154" height="39" label="Save DJ Mix" fontSize="16"
+				  fontWeight="bold" click="SaveDJMix_clickHandler(event)"/>
+		<s:CheckBox id="complete" includeIn="showreadybox" x="22" y="13" height="34"
+					label=" File is ready to be encoded and streamed?" fontSize="20" fontWeight="normal"
+					click="complete_clickHandler(event)"/>
+		<s:Label includeIn="encoded" x="23" y="22" width="366" height="37" fontSize="20"
+				 fontWeight="normal" text="File is encoded and streaming"/>
+		<s:Label includeIn="awaiting" x="23" y="20" width="189" height="28" fontSize="20"
+				 fontWeight="normal" text="Awaiting encoding"/>
+	</s:BorderContainer>
+</s:NavigatorContent>

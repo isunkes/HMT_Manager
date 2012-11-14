@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx"
+					xmlns:mixes="services.mixes.*"
+					xmlns:djs="services.djs.*"
+					xmlns:valueObjects="valueObjects.*"
+					width="690" height="554"
+					creationComplete="init()">
+	
+	<fx:Metadata>
+		[Event(name="editSelectedMix", type="events.EditMixEvent")]
+		[Event(name="addNewMix", type="events.createMixEvent")]
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="noneSelected"  />
+		<s:State name="mixSelected" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			
+			import events.EditMixEvent;
+			import events.createMixEvent;
+			import events.getDJEvent;
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
+			import mx.containers.ViewStack;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			[Bindable]
+			public var djImage:String = 'assets/placeHolderDJBig.png';
+			[Bindable]
+			public var djId:Number;
+			
+			[Bindable]
+			public var djNameText:String;
+			
+			[Bindable]
+			public var mixObject:Object;
+			
+			private function init():void 
+			{
+				currentState = 'noneSelected';
+			}
+			
+			protected function list_creationCompleteHandler(event:FlexEvent):void
+			{
+				getMixesResult.token = mixes.getMixes(djId);
+				
+			}
+			
+			
+			protected function editDjProfile_clickHandler(event:MouseEvent):void
+			{
+				ViewStack(this.parent).selectedIndex = 2;
+				
+			}
+			
+			protected function editMix_clickHandler(event:MouseEvent):void
+			{
+				var eventObj:EditMixEvent = new EditMixEvent("editSelectedMix");
+				eventObj.mixObject = mixlist.selectedItem;
+				dispatchEvent(eventObj);
+			}
+			
+			protected function addMix_clickHandler(event:MouseEvent):void
+			{
+				var eventObj:createMixEvent = new createMixEvent("addNewMix");
+				dispatchEvent(eventObj);
+			}
+			
+			protected function refreshList():void
+			{
+				getMixesResult.token = mixes.getMixes(djId);
+			}
+			
+			
+			
+			
+			protected function deleteMixButton_clickHandler(event:MouseEvent):void
+			{
+				
+				Alert.show("Delete this mix?","Confirm",Alert.YES|Alert.NO,this,deleteMix,null,Alert.NO)
+				
+			}
+			
+			protected function deleteMix(eventObj:CloseEvent):void
+			{
+				if (eventObj.detail == Alert.YES) {
+					deleteMixResult.addEventListener(ResultEvent.RESULT,onDeleteMix);
+					deleteMixResult.token = mixes.deleteMix(mixlist.selectedItem.id);
+					currentState = 'noneSelected';
+					Alert.show("Mix has been deleted","Message",Alert.OK,this,null,null,Alert.OK)
+				} 
+				
+				
+			}
+			
+			protected function onDeleteMix(event:ResultEvent):void
+			{
+				editMixButton.enabled = false;
+				deleteMixButton.enabled = false;
+				getMixesResult.token = mixes.getMixes(djId);
+			}
+			
+			
+			protected function mixlist_clickHandler(event:MouseEvent):void
+			{
+				
+				if (mixlist.selectedItem != null)
+				{
+					currentState = 'mixSelected';	
+					editMixButton.enabled = true;
+					deleteMixButton.enabled = true;
+					if (mixlist.selectedItem.complete == 4)
+					{
+						appStatusText.text = 'Mix is incomplete, there is no mix file uploaded.';
+					}
+					
+					if (mixlist.selectedItem.complete == 3)
+					{
+						appStatusText.text = 'Mix file has been uploaded, awaiting user approval to process and encoded.';
+					}
+					
+					if (mixlist.selectedItem.complete == 2)
+					{
+						appStatusText.text = 'Mix is currently being processed to streaming format.';
+					}
+					
+					if (mixlist.selectedItem.complete == 1)
+					{
+						appStatusText.text = 'Mix is processed and streaming in app.';
+					}
+				}	
+			}
+			
+			protected function logoutButton_clickHandler(event:MouseEvent):void
+			{
+				ViewStack(this.parent).selectedIndex = 0;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<s:CallResponder id="getMixesResult"/>
+		<mixes:Mixes id="mixes"
+					 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+					 showBusyCursor="true"/>
+		<s:CallResponder id="deleteMixResult"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+		<s:Label id="djNameLabel" x="10" y="14" width="206" height="26" fontSize="20" text="{djNameText}" />
+		<s:List id="mixlist" x="289" y="44" width="393" height="250"
+				creationComplete="list_creationCompleteHandler(event)"
+				itemRenderer="views.mixListItemRenderer" 
+				click="mixlist_clickHandler(event)">
+			<s:AsyncListView list="{getMixesResult.lastResult}" />
+		</s:List>
+		<s:Label x="289" y="14" width="97" height="22" fontSize="20" text="DJ Mixes&#xd;"/>
+		<s:Button id="editMixButton" x="587" y="303" width="95" height="25" label="Edit Mix"
+				  click="editMix_clickHandler(event)" fontSize="14" fontWeight="bold" enabled="false"/>
+		<s:Button x="289" y="303" width="124" height="26" label="Add a New Mix"
+				  click="addMix_clickHandler(event)" fontSize="14" fontWeight="bold"/>
+	<s:Button width="117" height="25" label="Edit DJ Profile"
+			  click="editDjProfile_clickHandler(event)" fontSize="14" fontWeight="bold"
+			  x="10" y="304" />
+	<s:Image x="10" y="44" width="250" height="250" source="{djImage}"/>
+	<s:Button id="deleteMixButton" x="463" y="303" width="117" height="25" label="Delete Mix"
+			  click="deleteMixButton_clickHandler(event)" fontSize="14" fontWeight="bold" enabled="false"/>
+	<s:BorderContainer x="9" y="363" width="670" height="172" backgroundColor="#666666"
+					   borderColor="#A4A4A4" borderWeight="4" dropShadowVisible="false" includeIn="mixSelected">
+		<s:Image id="selectedMixImage" x="10" y="10" width="130" height="130" source="{mixlist.selectedItem.mixImageSmall}" />
+		<s:Label id="selectedMixName" x="154" y="10" width="324" height="17" fontSize="18"
+				 fontWeight="bold" text="{mixlist.selectedItem.mixName}"/>
+		<s:Label id="selectedMixGenre" x="154" y="35" width="324" height="17" fontSize="14" text="{mixlist.selectedItem.mixGenre}"/>
+		<s:Label id="selectedMixYear" x="154" y="60" width="324" height="17" fontSize="14" text="{mixlist.selectedItem.mixYear}"/>
+		<s:Label id="selectedMixDesc" x="154" y="85" width="324" height="69" fontSize="14" text="{mixlist.selectedItem.mixDesc}"/>
+		<s:BorderContainer x="486" y="10" width="166" height="145" backgroundColor="#C9C9C9"
+						   borderWeight="3" cornerRadius="3">
+			<s:Label x="10" y="10" color="#404040" fontSize="16" fontWeight="bold" text="App Status:"/>
+			<s:Label id="appStatusText" x="10" y="33" width="141" height="96" color="#404040" fontSize="16"
+					 fontWeight="normal" text=""/>
+		</s:BorderContainer>
+		
+	</s:BorderContainer>
+	<s:BorderContainer includeIn="noneSelected" x="9" y="363" width="670" height="172" backgroundColor="#666666"
+					   borderColor="#A4A4A4" borderWeight="4" dropShadowVisible="false">
+		<s:Image x="10" y="10" width="130" height="130" source="assets/placeHolderMixSmall.png"/>
+		<s:Label x="149" y="11" width="503" height="19" fontSize="16" fontWeight="bold"
+				 text="Welcome to INDIEDJ.FM Manager"/>
+		<s:Label x="153" y="88" width="502" height="38" fontSize="16"
+				 text="This application is still very much in BETA, if you encounter any bugs or have any question be sure to let me know."/>
+		<s:Label x="149" y="38" width="503" height="42" fontSize="16"
+				 text="Use this application to upload and manage you DJ mixes, upload DJ mix cover images, and manage your DJ profile."/>
+	</s:BorderContainer>
+	<s:Button id="logoutButton" x="600" y="10" width="81" height="26" label="Logout"
+			  fontSize="14" fontWeight="bold" click="logoutButton_clickHandler(event)"/>
+	
+	
+	
+</s:NavigatorContent>
